@@ -2,9 +2,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Alert,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,250 +11,163 @@ import {
 
 export default function ScanResults() {
   const router = useRouter();
+  const [selectedFile, setSelectedFile] = useState("virus.exe");
 
-const [selectedFile, setSelectedFile] = useState(null);
-
-  const threatsFound = 0;
-  const safeFiles = 1;
-
-  /* -------- Pick File From Phone -------- */
   const pickFile = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*',
-        copyToCacheDirectory: true,
-      });
+    const result = await DocumentPicker.getDocumentAsync({
+      type: '*/*',
+    });
 
-      if (result.canceled === false) {
-        setSelectedFile(result.assets[0].name);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Unable to select file');
+    if (!result.canceled) {
+      setSelectedFile(result.assets[0].name);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Scan Results</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Scan Results</Text>
 
-          {/* Better Back Button */}
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => router.back()}
-          >
-            <Text style={styles.backIcon}>←</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => router.push('/tabs/scan')}>
+          <Text style={styles.backText}>←  Back to Scan</Text>
+        </TouchableOpacity>
+      </View>
 
-        {/* Result Cards */}
-        <View style={styles.resultRow}>
-          <View style={styles.threatCard}>
-            <Text style={styles.threatNumber}>{threatsFound}</Text>
-            <Text style={styles.threatText}>THREATS FOUND</Text>
-          </View>
+      {/* Filter Section */}
+      <Text style={styles.label}>Filter Results</Text>
+      <TouchableOpacity style={styles.dropdown}>
+        <Text style={styles.dropdownText}>Show Infected Files</Text>
+        <Text style={styles.arrow}>▼</Text>
+      </TouchableOpacity>
 
-          <View style={styles.safeCard}>
-            <Text style={styles.safeNumber}>{safeFiles}</Text>
-            <Text style={styles.safeText}>SAFE FILES</Text>
-          </View>
-        </View>
+      {/* Select File */}
+      <Text style={styles.label}>Select File to Take Action</Text>
+      <TouchableOpacity style={styles.selectBox} onPress={pickFile}>
+        <Text style={styles.selectText}>
+          {selectedFile}
+        </Text>
+        <Text style={styles.arrow}>▼</Text>
+      </TouchableOpacity>
 
-        {/* Filter */}
-        <Text style={styles.sectionLabel}>Filter by Category</Text>
-        <TouchableOpacity style={styles.dropdown}>
-          <Text>Show Infected Files (Threats)</Text>
-          <Text>▼</Text>
+      {/* Bottom Buttons */}
+      <View style={styles.bottomRow}>
+        <TouchableOpacity style={styles.quarantineBtn}>
+          <Text style={styles.quarantineText}>🗑  QUARANTINE</Text>
         </TouchableOpacity>
 
-        {/* File Selection */}
-        <Text style={styles.sectionLabel}>Select File to Take Action</Text>
-        <TouchableOpacity style={styles.selectBox} onPress={pickFile}>
-          <Text style={{ color: selectedFile ? '#000' : '#777' }}>
-            {selectedFile || 'Tap to select a file'}
-          </Text>
-          <Text>📁</Text>
+        <TouchableOpacity style={styles.repairBtn}>
+          <Text style={styles.repairText}>🔧  REPAIR (Clean)</Text>
         </TouchableOpacity>
+      </View>
 
-        {/* Action Buttons */}
-        <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={[
-              styles.quarantineBtn,
-              !selectedFile && { opacity: 0.5 },
-            ]}
-            disabled={!selectedFile}
-          >
-            <Text style={styles.quarantineText}>
-              📦 QUARANTINE
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.repairBtn,
-              !selectedFile && { opacity: 0.5 },
-            ]}
-            disabled={!selectedFile}
-          >
-            <Text style={styles.repairText}>
-              🔧 REPAIR
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-      </ScrollView>
     </SafeAreaView>
   );
 }
 
-/* ---------------- Styles ---------------- */
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#F2F2F2',
     paddingHorizontal: 20,
+    paddingTop: 20,
   },
 
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 15,
+    marginBottom: 30,
   },
 
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 
-  backBtn: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#2563EB',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 4,
+  backText: {
+    fontSize: 14,
+    color: '#333',
   },
 
-  backIcon: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-  resultRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 15,
-  },
-
-  threatCard: {
-    flex: 1,
-    backgroundColor: '#F8D7DA',
-    padding: 20,
-    borderRadius: 15,
-    marginRight: 10,
-    alignItems: 'center',
-  },
-
-  safeCard: {
-    flex: 1,
-    backgroundColor: '#D4EDDA',
-    padding: 20,
-    borderRadius: 15,
-    marginLeft: 10,
-    alignItems: 'center',
-  },
-
-  threatNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#DC2626',
-  },
-
-  threatText: {
-    fontSize: 12,
+  label: {
+    fontSize: 14,
     fontWeight: '600',
-    color: '#B91C1C',
-    marginTop: 5,
-  },
-
-  safeNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#16A34A',
-  },
-
-  safeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#15803D',
-    marginTop: 5,
-  },
-
-  sectionLabel: {
-    marginTop: 20,
     marginBottom: 8,
-    fontWeight: '600',
+    marginTop: 15,
   },
 
   dropdown: {
-    backgroundColor: '#E5E7EB',
-    padding: 14,
-    borderRadius: 12,
+    backgroundColor: '#EAEAEA',
+    padding: 16,
+    borderRadius: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 20,
+  },
+
+  dropdownText: {
+    fontSize: 15,
+    color: '#333',
   },
 
   selectBox: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#2563EB',
     padding: 16,
-    borderRadius: 15,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: '#2F80ED',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
 
-  actionRow: {
+  selectText: {
+    fontSize: 15,
+    color: '#333',
+  },
+
+  arrow: {
+    fontSize: 14,
+    color: '#555',
+  },
+
+  bottomRow: {
+    position: 'absolute',
+    bottom: 25,
+    left: 20,
+    right: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
   },
 
   quarantineBtn: {
     flex: 1,
-    backgroundColor: '#9CA3AF',
-    paddingVertical: 15,
-    borderRadius: 15,
+    backgroundColor: '#D9D9D9',
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: 'center',
     marginRight: 10,
   },
 
   quarantineText: {
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: '600',
+    color: '#333',
   },
 
   repairBtn: {
     flex: 1,
-    backgroundColor: '#2563EB',
-    paddingVertical: 15,
-    borderRadius: 15,
+    backgroundColor: '#2F80ED',
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: 'center',
     marginLeft: 10,
+    elevation: 4,
   },
 
   repairText: {
-    fontWeight: 'bold',
+    fontWeight: '600',
     color: '#fff',
   },
 });

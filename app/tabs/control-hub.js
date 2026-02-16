@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
 
 export default function ControlHub() {
@@ -16,10 +16,10 @@ export default function ControlHub() {
       </Text>
 
       <TouchableOpacity
-        style={[styles.button, styles.primaryButton]}
+        style={styles.button}
         onPress={() => console.log('Start Injection')}
       >
-        <Text style={[styles.buttonText, styles.primaryText]}>
+        <Text style={styles.buttonText}>
           Start New Injection
         </Text>
       </TouchableOpacity>
@@ -28,28 +28,18 @@ export default function ControlHub() {
         style={styles.button}
         onPress={() => console.log('Scan Now')}
       >
-        <Text style={styles.buttonText}>Scan Now</Text>
+        <Text style={styles.buttonText}>
+          Scan Now
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => console.log('Antivirus')}
+        style={[styles.button, styles.primaryButton]}
+        onPress={() => router.push('/tabs/antivirus')}
       >
-        <Text style={styles.buttonText}>Antivirus</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => console.log('Reports')}
-      >
-        <Text style={styles.buttonText}>Reports</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => console.log('Help & Info')}
-      >
-        <Text style={styles.buttonText}>Help & Information</Text>
+        <Text style={[styles.buttonText, styles.primaryText]}>
+          Antivirus
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -58,46 +48,47 @@ export default function ControlHub() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    backgroundColor: '#F2F2F2',
+    paddingHorizontal: 24,
+    paddingTop: 30,
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 25,
+    fontSize: 26,
+    fontWeight: '700',
+    marginBottom: 40,
+    color: '#111',
   },
 
   button: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: 16,
-    borderRadius: 12,
-    marginBottom: 15,
+    paddingVertical: 18,
+    borderRadius: 14,
+    marginBottom: 20,
     alignItems: 'center',
 
-    // Shadow for iOS
+    // iOS Shadow
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
 
-    // Shadow for Android
-    elevation: 3,
+    // Android Shadow
+    elevation: 4,
   },
 
   primaryButton: {
-    backgroundColor: '#1976D2',
+    backgroundColor: '#2F80ED',
   },
 
   buttonText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '500',
-    color: '#000',
+    color: '#222',
   },
 
   primaryText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });

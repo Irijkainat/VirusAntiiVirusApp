@@ -16,6 +16,7 @@ export default function TabLayout() {
   <Tabs.Screen name="signup" options={{ title: "Sign Up" }} />
   <Tabs.Screen name="injection-phase-1" options={{ title: "Phase 1" }} />
   <Tabs.Screen name="injection-phase-2" options={{ title: "Phase 2" }} />
+  <Tabs.Screen name="antivirus" options={{ title: "Antivirus" }} />
 </Tabs>
   );
 }
